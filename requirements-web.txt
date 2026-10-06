@@ -1,0 +1,5 @@
+# Packages for building and checking the browser version (see scripts/build_web.py).
+-r requirements.txt
+pygbag==0.9.3
+certifi  # trusted certificates for pygbag's downloads (Python.org's macOS builds lack them)
+playwright  # only for scripts/check_web.py, which uses your installed Chrome

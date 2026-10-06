@@ -1,0 +1,42 @@
+[project]
+name = "nova-strike"
+version = "1.0.0"
+description = "Nova Strike - a vertical scrolling space shooter built with pygame"
+requires-python = ">=3.10"
+dependencies = ["pygame==2.6.1"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+
+[tool.ruff.lint]
+select = [
+    "E", "W",   # pycodestyle
+    "F",        # pyflakes
+    "I",        # import sorting
+    "B",        # bugbear: likely bugs
+    "UP",       # modern syntax
+    "SIM",      # simplifications
+    "C4",       # comprehensions
+    "RUF",      # ruff-specific checks
+    "PL",       # pylint
+    "N",        # naming
+    "ANN",      # missing type annotations
+]
+ignore = [
+    "PLR0911", "PLR0912", "PLR0913", "PLR0915",  # complexity limits: game loops are naturally long
+    "PLR2004",  # magic numbers: tuning constants are inline by design
+]
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+warn_unreachable = true
+
+[[tool.mypy.overrides]]
+# tests check state before and after calls that change it, which mypy's narrowing reads as unreachable
+module = "tests.*"
+warn_unreachable = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

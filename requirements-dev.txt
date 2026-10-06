@@ -1,0 +1,4 @@
+-r requirements-web.txt
+ruff
+mypy
+pytest
