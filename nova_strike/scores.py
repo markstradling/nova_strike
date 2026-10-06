@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import os
 from collections.abc import Sequence
 from typing import TYPE_CHECKING, Protocol, cast
 
@@ -61,7 +62,9 @@ def save_scores(entries: Sequence[ScoreEntry], path: str | None = None) -> None:
         if storage is not None:
             storage.setItem(WEB_STORAGE_KEY, text)
         else:
-            with open(path or cfg.SCORES_FILE, "w") as f:
+            path = path or cfg.SCORES_FILE
+            os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
+            with open(path, "w") as f:
                 f.write(text)
     except OSError:
         pass

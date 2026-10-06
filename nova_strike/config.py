@@ -161,8 +161,23 @@ SLOWMO_KEYS = available_keys("K_LSHIFT", "K_RSHIFT")
 SCOREBOARD_SIZE = 10
 
 
-# saved in the project folder, next to main.py
-SCORES_FILE = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "highscores.json")
+def user_data_dir() -> str:
+    """The per-user folder for saved data, used by the packaged desktop builds."""
+    system: str = sys.platform  # a plain str, so mypy checks every branch rather than only this machine's
+    if system == "win32":
+        return os.path.join(os.environ.get("APPDATA") or os.path.expanduser("~"), "Nova Strike")
+    if system == "darwin":
+        return os.path.expanduser("~/Library/Application Support/Nova Strike")
+    return os.path.join(os.environ.get("XDG_DATA_HOME") or os.path.expanduser("~/.local/share"), "nova-strike")
+
+
+# saved in the project folder, next to main.py. A packaged build (PyInstaller sets sys.frozen) runs
+# from a temporary or read-only folder, so it saves in the user's data folder instead.
+SCORES_FILE = (
+    os.path.join(user_data_dir(), "highscores.json")
+    if getattr(sys, "frozen", False)
+    else os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "highscores.json")
+)
 
 
 NAME_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"

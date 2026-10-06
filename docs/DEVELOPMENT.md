@@ -103,6 +103,29 @@ it in `ai.py` (see `_dodge_target`).
 Add an entry to `build_sound_samples` in `sound.py`, built from `tone`, `noise`, `silence`, `mix`, `concat` and
 `notes`, with a volume. Play it with `game.sfx.play("name")`.
 
+## Building the desktop version
+
+`scripts/build_desktop.py` packages the game with [PyInstaller](https://pyinstaller.org/) into a standalone app
+that players can run without installing Python:
+
+```bash
+venv/bin/pip install -r requirements-desktop.txt
+venv/bin/python scripts/build_desktop.py
+```
+
+It builds for the platform it runs on and writes `dist/nova-strike-<version>-<platform>.zip` (`.tar.gz` on
+Linux). The version comes from `pyproject.toml`. Packaged builds save high scores in the user's data folder
+(`~/Library/Application Support/Nova Strike` on macOS, `%APPDATA%\Nova Strike` on Windows,
+`~/.local/share/nova-strike` on Linux), because the app itself runs from a temporary or read-only folder.
+
+The `Desktop release` GitHub Actions workflow (`.github/workflows/desktop-release.yml`) runs this on Windows,
+macOS and Linux whenever a GitHub release is published, and attaches the three archives to the release. To add
+builds to an existing release, run the workflow by hand from the Actions tab and give it the release's tag: it
+builds the branch you run it on.
+
+The builds aren't code-signed. On macOS, players open the app the first time with right-click > Open, and on
+Windows they choose "More info" > "Run anyway" in the SmartScreen warning.
+
 ## Conventions
 
 - Every function has type hints; the code passes `mypy --strict`.

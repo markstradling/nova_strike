@@ -1,0 +1,3 @@
+# Packages for building the standalone desktop version (see scripts/build_desktop.py).
+-r requirements.txt
+pyinstaller==6.22.3
